@@ -10,6 +10,8 @@ var filter: Texture2D
 
 var _last_pos: Vector2
 var _has_last = false
+var _outline: PackedVector2Array
+var _outline_source: Texture2D
 
 
 func _ready() -> void:
@@ -117,3 +119,14 @@ func _place_stamp(_position: Vector2, _canvas: Canvas) -> void:
 			layer.set_pixel(pixel_x, pixel_y, base)
 
 	current_page.set_layer(project.current_layer, layer)
+
+
+func hides_system_cursor() -> bool:
+	return true
+
+
+func draw_cursor_preview(_target: CanvasItem, _position: Vector2, _pixel_size: float) -> void:
+	if original_stamp != _outline_source:
+		_outline_source = original_stamp
+		_outline = CursorGraphics.stamp_outline(original_stamp)
+	CursorGraphics.draw_stamp_preview(_target, _outline, _position, width, _pixel_size)

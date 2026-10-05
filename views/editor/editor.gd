@@ -19,6 +19,8 @@ var current_tool: Tool:
 
 func _ready() -> void:
 	canvas.canvas_input.connect(_handle_canvas_input)
+	tool_changed.connect(canvas.set_cursor_tool)
+	canvas.set_cursor_tool(current_tool)
 
 	page_controls.menu_toggle.connect(edit_extras.open)
 	page_controls.play_toggle.connect(

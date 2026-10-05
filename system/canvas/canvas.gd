@@ -6,6 +6,7 @@ signal canvas_input(event: InputEventMouse)
 @export var camera_movable: bool = false
 @export var camera: Camera2D
 
+var cursor_overlay: CursorOverlay
 var _project: Project
 
 @onready var control_node: Control = $Control
@@ -20,6 +21,13 @@ var _project: Project
 func _ready() -> void:
 	camera.movable = camera_movable
 
+	# Added after the dynamic node so the preview is drawn on top of it.
+	cursor_overlay = CursorOverlay.new()
+	cursor_overlay.name = "CursorOverlay"
+	control_node.add_child(cursor_overlay)
+	control_node.mouse_entered.connect(cursor_overlay.set_hovered.bind(true))
+	control_node.mouse_exited.connect(cursor_overlay.set_hovered.bind(false))
+
 
 func attach_project(project: Project) -> void:
 	if _project and _project.new_current_page.is_connected(render_page):
@@ -30,6 +38,12 @@ func attach_project(project: Project) -> void:
 	if _project:
 		_project.new_current_page.connect(render_page)
 		onion_skin_renderer.attach_project(project)
+
+
+## Sets the tool whose cursor is shown over the canvas. [br]
+## [param tool] - The active tool.
+func set_cursor_tool(tool: Tool) -> void:
+	cursor_overlay.tool = tool
 
 
 ## Refreshes canvas sprites to current page. [br]
