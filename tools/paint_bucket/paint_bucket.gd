@@ -1,12 +1,23 @@
 class_name PaintBucket
 extends Tool
 
+const BUCKET_GAP := 2.0
+const BUCKET_ARM := 8.0
+
 @export var title: String = "Paint Bucket"
 @export var tolerance: float
 
 
 func _init() -> void:
 	name = "Paint Bucket"
+
+
+func hides_system_cursor() -> bool:
+	return true
+
+
+func draw_cursor_preview(_target: CanvasItem, _position: Vector2, _pixel_size: float) -> void:
+	CursorGraphics.draw_crosshair(_target, _position, _pixel_size, BUCKET_GAP, BUCKET_ARM)
 
 
 func on_pointer_down(_position: Vector2, _canvas: Canvas) -> void:

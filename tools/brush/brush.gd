@@ -11,10 +11,13 @@ var stamp_tex: Texture2D
 var _stroke_node: Node2D
 var _last_pos: Vector2
 var _has_last = false
+var _outline: PackedVector2Array
+var _outline_source: Texture2D
 
 
 func _ready() -> void:
 	stamp_tex = generate_stamp()
+
 
 func on_pointer_down(_position: Vector2, _canvas: Canvas) -> void:
 	_stroke_node = Node2D.new()
@@ -89,3 +92,14 @@ func _place_stamp(_position: Vector2) -> void:
 	s.scale = Vector2.ONE * scale_factor
 
 	_stroke_node.add_child(s)
+
+
+func hides_system_cursor() -> bool:
+	return true
+
+
+func draw_cursor_preview(_target: CanvasItem, _position: Vector2, _pixel_size: float) -> void:
+	if original_stamp != _outline_source:
+		_outline_source = original_stamp
+		_outline = CursorGraphics.stamp_outline(original_stamp)
+	CursorGraphics.draw_stamp_preview(_target, _outline, _position, width, _pixel_size)
